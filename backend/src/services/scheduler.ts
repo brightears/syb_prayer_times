@@ -1,6 +1,6 @@
-import { PrayerSchedule, Prayer } from '@prisma/client';
+import type { PrayerSchedule, Prayer } from '@prisma/client';
 import { scheduleJob } from 'node-schedule';
-import { startOfDay, addDays, isWithinInterval, format } from 'date-fns';
+import { startOfDay, addDays, isWithinInterval } from 'date-fns';
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import logger from '../lib/logger';
 import { prisma } from '../lib/prisma';
@@ -34,7 +34,6 @@ async function fetchAndStorePrayerTimes(schedule: PrayerSchedule, date: Date) {
   }
 
   const dateInZone = toZonedTime(date, schedule.timeZone);
-  // const dateStr = format(dateInZone, 'yyyy-MM-dd');
 
   const parsePrayerTime = (timeStr: string): Date | null => {
     if (!timeStr) return null;

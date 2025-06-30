@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { format } from 'date-fns';
-import { CalculationMethod, JuristicMethod, HighLatitudeRule } from '@prisma/client';
+import type { CalculationMethod, JuristicMethod, HighLatitudeRule } from '@prisma/client';
 import logger from '../lib/logger';
 
 const ALADHAN_API_URL = 'https://api.aladhan.com/v1';

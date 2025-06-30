@@ -1,0 +1,29 @@
+{
+  "name": "syb-prayer-times",
+  "version": "1.0.0",
+  "description": "Automatic music pausing during prayer times for Soundtrack Your Brand",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:web": "cd web && npm run dev",
+    "build": "npm run build:backend && npm run build:web",
+    "build:backend": "cd backend && npm run build",
+    "build:web": "cd web && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:web\"",
+    "start:backend": "cd backend && npm run start",
+    "start:web": "cd web && npm run start",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "cd backend && npm run db:seed",
+    "install:all": "npm install && cd backend && npm install && cd ../web && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prisma": "^5.11.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

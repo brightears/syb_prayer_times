@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password      String
+  name          String?
+  role          Role     @default(CLIENT)
+  accountId     Int?
+  account       Account? @relation(fields: [accountId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  sessions      Session[]
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  token        String   @unique
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+}
+
+model Account {
+  id               Int               @id @default(autoincrement())
+  accountId        String            @unique
+  accountName      String
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  users            User[]
+  prayerSchedules  PrayerSchedule[]
+}
+
+model PrayerSchedule {
+  id                 Int                @id @default(autoincrement())
+  soundZoneId        String
+  soundZoneName      String
+  accountId          Int
+  account            Account            @relation(fields: [accountId], references: [id])
+  isActive           Boolean            @default(true)
+  location           String             // City, Country
+  latitude           Float?
+  longitude          Float?
+  timeZone           String
+  calculationMethod  CalculationMethod  @default(ISNA)
+  juristicMethod     JuristicMethod     @default(SHAFI)
+  highLatitudeRule   HighLatitudeRule   @default(MIDDLE_OF_NIGHT)
+  adjustments        Json?              // Fine-tune adjustments for each prayer
+  baselineVolume     Int                @default(50)
+  muteDuringPrayer   Boolean            @default(true)
+  muteVolume         Int                @default(0)
+  preMuteMinutes     Int                @default(0)    // Minutes before prayer to start muting
+  muteDurationMinutes Int               @default(10)   // Duration to keep muted after prayer starts
+  ramadanOnly        Boolean            @default(false)
+  enabledPrayers     Json               @default("[\"fajr\", \"dhuhr\", \"asr\", \"maghrib\", \"isha\"]")
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  prayerTimes        PrayerTime[]
+  muteHistory        MuteHistory[]
+  
+  @@unique([soundZoneId, accountId])
+}
+
+model PrayerTime {
+  id               Int             @id @default(autoincrement())
+  scheduleId       Int
+  schedule         PrayerSchedule  @relation(fields: [scheduleId], references: [id])
+  date             DateTime        @db.Date
+  fajr             DateTime?
+  sunrise          DateTime?
+  dhuhr            DateTime?
+  asr              DateTime?
+  sunset           DateTime?
+  maghrib          DateTime?
+  isha             DateTime?
+  imsak            DateTime?
+  midnight         DateTime?
+  fetchedAt        DateTime        @default(now())
+  
+  @@unique([scheduleId, date])
+  @@index([date])
+}
+
+model MuteHistory {
+  id               Int             @id @default(autoincrement())
+  scheduleId       Int
+  schedule         PrayerSchedule  @relation(fields: [scheduleId], references: [id])
+  prayer           Prayer
+  mutedAt          DateTime
+  unmutedAt        DateTime?
+  volumeBefore     Int
+  volumeAfter      Int
+  success          Boolean         @default(true)
+  errorMessage     String?
+  
+  @@index([scheduleId, mutedAt])
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+enum CalculationMethod {
+  MWL     // Muslim World League
+  ISNA    // Islamic Society of North America
+  EGYPT   // Egyptian General Authority of Survey
+  MAKKAH  // Umm al-Qura University, Makkah
+  KARACHI // University of Islamic Sciences, Karachi
+  TEHRAN  // Institute of Geophysics, University of Tehran
+  JAFARI  // Shia Ithna-Ashari, Leva Institute, Qum
+}
+
+enum JuristicMethod {
+  SHAFI   // Shafi, Maliki, Hanbali
+  HANAFI  // Hanafi
+}
+
+enum HighLatitudeRule {
+  MIDDLE_OF_NIGHT
+  SEVENTH_OF_NIGHT
+  ANGLE_BASED
+}
+
+enum Prayer {
+  FAJR
+  DHUHR
+  ASR
+  MAGHRIB
+  ISHA
+}

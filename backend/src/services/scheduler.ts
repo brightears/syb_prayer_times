@@ -1,4 +1,29 @@
-import type { PrayerSchedule, Prayer } from '@prisma/client';
+// Define types locally to avoid Prisma import issues
+type Prayer = 'FAJR' | 'DHUHR' | 'ASR' | 'MAGHRIB' | 'ISHA';
+
+interface PrayerSchedule {
+  id: number;
+  soundZoneId: string;
+  soundZoneName: string;
+  accountId: number;
+  isActive: boolean;
+  location: string;
+  latitude: number | null;
+  longitude: number | null;
+  timeZone: string;
+  calculationMethod: any;
+  juristicMethod: any;
+  highLatitudeRule: any;
+  adjustments: any;
+  baselineVolume: number;
+  muteDuringPrayer: boolean;
+  muteVolume: number;
+  preMuteMinutes: number;
+  muteDurationMinutes: number;
+  ramadanOnly: boolean;
+  enabledPrayers: any;
+  prayerTimes?: any[];
+}
 import { scheduleJob } from 'node-schedule';
 import { startOfDay, addDays, isWithinInterval } from 'date-fns';
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
@@ -258,11 +283,11 @@ async function checkPrayerTimes() {
 
       // Check each prayer
       const prayers: Array<{ name: Prayer; time: Date | null }> = [
-        { name: Prayer.FAJR, time: prayerTime.fajr },
-        { name: Prayer.DHUHR, time: prayerTime.dhuhr },
-        { name: Prayer.ASR, time: prayerTime.asr },
-        { name: Prayer.MAGHRIB, time: prayerTime.maghrib },
-        { name: Prayer.ISHA, time: prayerTime.isha },
+        { name: 'FAJR', time: prayerTime.fajr },
+        { name: 'DHUHR', time: prayerTime.dhuhr },
+        { name: 'ASR', time: prayerTime.asr },
+        { name: 'MAGHRIB', time: prayerTime.maghrib },
+        { name: 'ISHA', time: prayerTime.isha },
       ];
 
       for (const { name, time } of prayers) {

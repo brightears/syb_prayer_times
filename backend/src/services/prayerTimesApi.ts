@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { format } from 'date-fns';
-import type { CalculationMethod, JuristicMethod, HighLatitudeRule } from '@prisma/client';
+// Using string literals instead of importing from Prisma
+type CalculationMethod = 'MWL' | 'ISNA' | 'EGYPT' | 'MAKKAH' | 'KARACHI' | 'TEHRAN' | 'JAFARI';
+type JuristicMethod = 'SHAFI' | 'HANAFI';
+type HighLatitudeRule = 'MIDDLE_OF_NIGHT' | 'SEVENTH_OF_NIGHT' | 'ANGLE_BASED';
 import logger from '../lib/logger';
 
 const ALADHAN_API_URL = 'https://api.aladhan.com/v1';
@@ -31,24 +34,24 @@ interface AladhanResponse {
 }
 
 const calculationMethodMap: Record<CalculationMethod, number> = {
-  [CalculationMethod.MWL]: 3,
-  [CalculationMethod.ISNA]: 2,
-  [CalculationMethod.EGYPT]: 5,
-  [CalculationMethod.MAKKAH]: 4,
-  [CalculationMethod.KARACHI]: 1,
-  [CalculationMethod.TEHRAN]: 7,
-  [CalculationMethod.JAFARI]: 0,
+  'MWL': 3,
+  'ISNA': 2,
+  'EGYPT': 5,
+  'MAKKAH': 4,
+  'KARACHI': 1,
+  'TEHRAN': 7,
+  'JAFARI': 0,
 };
 
 const juristicMethodMap: Record<JuristicMethod, number> = {
-  [JuristicMethod.SHAFI]: 0,
-  [JuristicMethod.HANAFI]: 1,
+  'SHAFI': 0,
+  'HANAFI': 1,
 };
 
 const highLatitudeRuleMap: Record<HighLatitudeRule, number> = {
-  [HighLatitudeRule.MIDDLE_OF_NIGHT]: 1,
-  [HighLatitudeRule.SEVENTH_OF_NIGHT]: 2,
-  [HighLatitudeRule.ANGLE_BASED]: 3,
+  'MIDDLE_OF_NIGHT': 1,
+  'SEVENTH_OF_NIGHT': 2,
+  'ANGLE_BASED': 3,
 };
 
 export interface PrayerTimesOptions {

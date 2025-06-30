@@ -1,10 +1,10 @@
-import { PrismaClient, PrayerSchedule, Prayer } from '@prisma/client';
+import { PrayerSchedule, Prayer } from '@prisma/client';
 import { scheduleJob } from 'node-schedule';
-import { startOfDay, addDays, isWithinInterval, parseISO, format } from 'date-fns';
+import { startOfDay, addDays, isWithinInterval, format } from 'date-fns';
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
 import logger from '../lib/logger';
 import { prisma } from '../lib/prisma';
-import { fetchPrayerTimes, fetchMonthlyPrayerTimes } from './prayerTimesApi';
+import { fetchPrayerTimes } from './prayerTimesApi';
 import { muteZone, unmuteZone, getZoneVolume } from './soundtrackApi';
 
 interface ActiveMute {
@@ -34,7 +34,7 @@ async function fetchAndStorePrayerTimes(schedule: PrayerSchedule, date: Date) {
   }
 
   const dateInZone = toZonedTime(date, schedule.timeZone);
-  const dateStr = format(dateInZone, 'yyyy-MM-dd');
+  // const dateStr = format(dateInZone, 'yyyy-MM-dd');
 
   const parsePrayerTime = (timeStr: string): Date | null => {
     if (!timeStr) return null;
@@ -81,7 +81,7 @@ async function fetchAndStorePrayerTimes(schedule: PrayerSchedule, date: Date) {
   return prayerTime;
 }
 
-async function isRamadan(date: Date): Promise<boolean> {
+async function isRamadan(_date: Date): Promise<boolean> {
   // This is a simplified check. In production, you'd want to use a proper
   // Hijri calendar library or API to accurately determine Ramadan dates
   // For now, we'll assume Ramadan dates are stored in the database or
@@ -137,7 +137,7 @@ async function muteForPrayer(schedule: PrayerSchedule, prayer: Prayer) {
       const success = await muteZone(schedule.soundZoneId);
       
       if (success !== null) {
-        const muteRecord = await prisma.muteHistory.create({
+        await prisma.muteHistory.create({
           data: {
             scheduleId: schedule.id,
             prayer,

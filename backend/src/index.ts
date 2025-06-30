@@ -1,4 +1,4 @@
-import { env } from './lib/env';
+import './lib/env';
 import logger from './lib/logger';
 import { startScheduler } from './services/scheduler';
 import { prisma } from './lib/prisma';

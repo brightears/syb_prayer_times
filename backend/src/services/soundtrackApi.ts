@@ -58,7 +58,7 @@ const SET_VOLUME_MUTATION = gql`
 
 export async function getAccount(accountId: string): Promise<Account | null> {
   try {
-    const data = await client.request(GET_ACCOUNT_QUERY, { accountId });
+    const data: any = await client.request(GET_ACCOUNT_QUERY, { accountId });
     
     if (data.account) {
       return {
@@ -80,7 +80,7 @@ export async function getAccount(accountId: string): Promise<Account | null> {
 
 export async function getZoneVolume(zoneId: string): Promise<number | null> {
   try {
-    const data = await client.request(GET_ZONE_VOLUME_QUERY, { zoneId });
+    const data: any = await client.request(GET_ZONE_VOLUME_QUERY, { zoneId });
     
     if (data.soundZone) {
       return data.soundZone.volume;
@@ -95,7 +95,7 @@ export async function getZoneVolume(zoneId: string): Promise<number | null> {
 
 export async function setZoneVolume(zoneId: string, volume: number): Promise<boolean> {
   try {
-    const data = await client.request(SET_VOLUME_MUTATION, { 
+    const data: any = await client.request(SET_VOLUME_MUTATION, { 
       soundZone: zoneId, 
       volume: Math.max(0, Math.min(100, volume)) 
     });

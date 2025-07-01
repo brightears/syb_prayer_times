@@ -3,18 +3,27 @@ import { getSession } from '@/lib/auth'
 import { GraphQLClient, gql } from 'graphql-request'
 
 const GET_ZONES_QUERY = gql`
-  query GetZones($accountId: ID!) {
-    account(id: $accountId) {
-      locations(first: 100) {
-        edges {
-          node {
-            id
-            name
-            soundZones(first: 100) {
-              edges {
-                node {
-                  id
-                  name
+  query GetZones {
+    me {
+      ...on PublicAPIClient {
+        accounts(first: 100) {
+          edges {
+            node {
+              id
+              locations(first: 100) {
+                edges {
+                  node {
+                    id
+                    name
+                    soundZones(first: 100) {
+                      edges {
+                        node {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -58,29 +67,49 @@ export async function GET(
 
     try {
       console.log('Fetching from SYB API with query:', GET_ZONES_QUERY)
-      const data: any = await client.request(GET_ZONES_QUERY, { accountId })
+      console.log('Looking for account ID:', accountId)
+      const data: any = await client.request(GET_ZONES_QUERY)
       console.log('SYB API response:', JSON.stringify(data, null, 2))
       
-      if (data.account?.locations?.edges) {
+      if (data.me?.accounts?.edges) {
         const zones: any[] = []
-        data.account.locations.edges.forEach((location: any) => {
-          if (location.node?.soundZones?.edges) {
-            location.node.soundZones.edges.forEach((zone: any) => {
-              if (zone.node) {
-                zones.push({
-                  id: zone.node.id,
-                  name: `${location.node.name} - ${zone.node.name}`,
-                })
-              }
-            })
-          }
-        })
+        
+        console.log('Total accounts found:', data.me.accounts.edges.length)
+        console.log('Account IDs:', data.me.accounts.edges.map((edge: any) => edge.node?.id))
+        
+        // Find the specific account
+        const accountEdge = data.me.accounts.edges.find((edge: any) => 
+          edge.node?.id === accountId
+        )
+        
+        console.log('Found matching account:', accountEdge ? 'Yes' : 'No')
+        
+        if (accountEdge?.node?.locations?.edges) {
+          console.log('Locations found:', accountEdge.node.locations.edges.length)
+          accountEdge.node.locations.edges.forEach((location: any) => {
+            if (location.node?.soundZones?.edges) {
+              console.log(`Location ${location.node.name} has ${location.node.soundZones.edges.length} zones`)
+              location.node.soundZones.edges.forEach((zone: any) => {
+                if (zone.node) {
+                  zones.push({
+                    id: zone.node.id,
+                    name: `${location.node.name} - ${zone.node.name}`,
+                  })
+                }
+              })
+            }
+          })
+        }
+        
+        console.log('Total zones found:', zones.length)
         return NextResponse.json({ zones })
       } else {
+        console.log('No accounts found in response')
         return NextResponse.json({ zones: [] })
       }
-    } catch (apiError) {
+    } catch (apiError: any) {
       console.error('SYB API error:', apiError)
+      console.error('Error details:', apiError.response || apiError.message)
       // Return empty zones on error
       return NextResponse.json({ zones: [] })
     }

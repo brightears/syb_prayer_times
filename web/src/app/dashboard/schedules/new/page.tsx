@@ -41,6 +41,7 @@ export default function NewSchedulePage() {
   const [zones, setZones] = useState<Array<{ id: string; name: string }>>([])
   const [accounts, setAccounts] = useState<Array<{ id: string; accountId: string; accountName: string }>>([])
   const [loadingAccounts, setLoadingAccounts] = useState(true)
+  const [selectedSybAccountId, setSelectedSybAccountId] = useState('')
   
   useEffect(() => {
     fetchAccounts()
@@ -81,12 +82,18 @@ export default function NewSchedulePage() {
     setFormData({ ...formData, accountId, soundZoneId: '', soundZoneName: '' })
     if (!accountId) {
       setZones([])
+      setSelectedSybAccountId('')
       return
     }
 
+    // Find the selected account to get its SYB account ID
+    const selectedAccount = accounts.find(acc => acc.id === accountId)
+    if (!selectedAccount) return
+    
+    setSelectedSybAccountId(selectedAccount.accountId)
     setLoadingZones(true)
     try {
-      const res = await fetch(`/api/accounts/${accountId}/zones`)
+      const res = await fetch(`/api/accounts/${selectedAccount.accountId}/zones`)
       if (res.ok) {
         const data = await res.json()
         setZones(data.zones)

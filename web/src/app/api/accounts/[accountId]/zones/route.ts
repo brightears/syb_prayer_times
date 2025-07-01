@@ -36,6 +36,7 @@ export async function GET(
     }
 
     const { accountId } = params
+    console.log('Fetching zones for account:', accountId)
 
     // For now, return mock data since we're using test account
     if (accountId === '1' || accountId === 'test-account-001') {
@@ -56,7 +57,9 @@ export async function GET(
     })
 
     try {
+      console.log('Fetching from SYB API with query:', GET_ZONES_QUERY)
       const data: any = await client.request(GET_ZONES_QUERY, { accountId })
+      console.log('SYB API response:', JSON.stringify(data, null, 2))
       
       if (data.account?.locations?.edges) {
         const zones: any[] = []

@@ -171,7 +171,7 @@ export default function NewSchedulePage() {
               <option key={account.id} value={account.id}>
                 {account.accountName}
               </option>
-            ))
+            ))}
           </select>
         </div>
 

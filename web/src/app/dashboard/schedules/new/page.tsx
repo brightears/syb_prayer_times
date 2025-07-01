@@ -49,13 +49,18 @@ export default function NewSchedulePage() {
 
   const fetchAccounts = async () => {
     try {
+      console.log('Fetching accounts...')
       const res = await fetch('/api/accounts/list')
+      console.log('Accounts API response status:', res.status)
       if (res.ok) {
         const data = await res.json()
-        setAccounts(data.accounts)
+        console.log('Accounts data:', data)
+        setAccounts(data.accounts || [])
+      } else {
+        console.error('Failed to fetch accounts, status:', res.status)
       }
     } catch (err) {
-      console.error('Failed to fetch accounts')
+      console.error('Failed to fetch accounts:', err)
     } finally {
       setLoadingAccounts(false)
     }
@@ -79,6 +84,9 @@ export default function NewSchedulePage() {
   })
 
   const handleAccountChange = async (accountId: string) => {
+    console.log('Account changed to:', accountId)
+    console.log('Available accounts:', accounts)
+    
     setFormData({ ...formData, accountId, soundZoneId: '', soundZoneName: '' })
     if (!accountId) {
       setZones([])
@@ -88,11 +96,18 @@ export default function NewSchedulePage() {
 
     // Find the selected account to get its SYB account ID
     const selectedAccount = accounts.find(acc => acc.id === accountId)
-    if (!selectedAccount) return
+    console.log('Selected account:', selectedAccount)
+    
+    if (!selectedAccount) {
+      console.error('Account not found in accounts list')
+      return
+    }
     
     setSelectedSybAccountId(selectedAccount.accountId)
     setLoadingZones(true)
     console.log('Fetching zones for SYB account ID:', selectedAccount.accountId)
+    console.log('API URL:', `/api/accounts/${selectedAccount.accountId}/zones`)
+    
     try {
       const res = await fetch(`/api/accounts/${selectedAccount.accountId}/zones`)
       console.log('Zones API response status:', res.status)

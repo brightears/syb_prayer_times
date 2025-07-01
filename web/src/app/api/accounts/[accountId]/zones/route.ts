@@ -36,10 +36,14 @@ export async function GET(
     }
 
     const { accountId } = params
-    console.log('Fetching zones for account:', accountId)
+    console.log('Zones API called for account:', accountId)
 
+    // Always log incoming request
+    console.log('Request received at zones API, account ID:', accountId)
+    
     // For now, return mock data since we're using test account
     if (accountId === '1' || accountId === 'test-account-001') {
+      console.log('Returning mock data for test account')
       return NextResponse.json({
         zones: [
           { id: 'zone-1', name: 'Main Dining Area' },

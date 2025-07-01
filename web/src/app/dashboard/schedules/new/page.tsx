@@ -95,7 +95,8 @@ export default function NewSchedulePage() {
     }
 
     // Find the selected account to get its SYB account ID
-    const selectedAccount = accounts.find(acc => acc.id === accountId)
+    // Convert accountId to string for comparison since select values are strings
+    const selectedAccount = accounts.find(acc => String(acc.id) === accountId)
     console.log('Selected account:', selectedAccount)
     
     if (!selectedAccount) {

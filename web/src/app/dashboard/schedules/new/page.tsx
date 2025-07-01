@@ -92,15 +92,21 @@ export default function NewSchedulePage() {
     
     setSelectedSybAccountId(selectedAccount.accountId)
     setLoadingZones(true)
+    console.log('Fetching zones for SYB account ID:', selectedAccount.accountId)
     try {
       const res = await fetch(`/api/accounts/${selectedAccount.accountId}/zones`)
+      console.log('Zones API response status:', res.status)
       if (res.ok) {
         const data = await res.json()
-        setZones(data.zones)
+        console.log('Zones data received:', data)
+        setZones(data.zones || [])
       } else {
+        const errorData = await res.text()
+        console.error('Failed to load zones:', res.status, errorData)
         setError('Failed to load zones')
       }
     } catch (err) {
+      console.error('Error fetching zones:', err)
       setError('Failed to load zones')
     } finally {
       setLoadingZones(false)

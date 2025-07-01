@@ -27,7 +27,7 @@ const GET_ZONES_QUERY = gql`
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { accountId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const user = await getSession()
@@ -35,7 +35,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { accountId } = params
+    const accountId = params.id
     console.log('Zones API called for account:', accountId)
 
     // Always log incoming request

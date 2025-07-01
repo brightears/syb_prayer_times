@@ -22,7 +22,7 @@ const FRIDAY_ADJUSTMENTS = {
 };
 
 // Ramadan adjustments (Tarawih prayers)
-const RAMADAN_ADJUSTMENTS = {
+const RAMADAN_ADJUSTMENTS: Partial<Record<string, number>> = {
   isha: 45, // Isha + Tarawih prayers
 };
 
@@ -63,7 +63,7 @@ export function calculatePrayerDuration(options: PrayerDurationOptions): number 
   
   // Apply Ramadan adjustments
   if (isRamadan && RAMADAN_ADJUSTMENTS[prayer]) {
-    duration = RAMADAN_ADJUSTMENTS[prayer];
+    duration = RAMADAN_ADJUSTMENTS[prayer]!;
   }
   
   return duration;

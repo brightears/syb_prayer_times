@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "cd .. && npx prisma generate && cd backend && node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "db:seed": "tsx src/seed.ts"
+    "db:seed": "tsx src/seed.ts",
+    "postinstall": "cd .. && npx prisma generate && cd backend"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",

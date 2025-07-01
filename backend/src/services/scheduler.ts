@@ -277,8 +277,9 @@ async function checkPrayerTimes() {
 
       // Fetch prayer times if not available for today
       if (!prayerTime) {
-        prayerTime = await fetchAndStorePrayerTimes(schedule, now);
-        if (!prayerTime) continue;
+        const fetchedPrayerTime = await fetchAndStorePrayerTimes(schedule, now);
+        if (!fetchedPrayerTime) continue;
+        prayerTime = fetchedPrayerTime;
       }
 
       // Check each prayer

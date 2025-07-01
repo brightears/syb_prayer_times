@@ -46,12 +46,9 @@ const GET_ZONE_VOLUME_QUERY = gql`
 `;
 
 const SET_VOLUME_MUTATION = gql`
-  mutation SetVolume($soundZone: String!, $volume: Int!) {
-    setSoundZoneVolume(input: { soundZone: $soundZone, volume: $volume }) {
-      soundZone {
-        id
-        volume
-      }
+  mutation SetVolume($soundZone: ID!, $volume: Volume!) {
+    setVolume(input: { soundZone: $soundZone, volume: $volume }) {
+      volume
     }
   }
 `;
@@ -97,13 +94,13 @@ export async function setZoneVolume(zoneId: string, volume: number): Promise<boo
   try {
     const data: any = await client.request(SET_VOLUME_MUTATION, { 
       soundZone: zoneId, 
-      volume: Math.max(0, Math.min(100, volume)) 
+      volume: { level: Math.max(0, Math.min(100, volume)) }
     });
     
     logger.info('Set zone volume', { 
       zoneId, 
       volume, 
-      newVolume: data.setSoundZoneVolume?.soundZone?.volume 
+      newVolume: data.setVolume?.volume 
     });
     
     return true;

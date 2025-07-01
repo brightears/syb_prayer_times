@@ -8,10 +8,9 @@ const validateSchema = z.object({
 })
 
 const GET_ACCOUNT_QUERY = gql`
-  query GetAccount($accountId: String!) {
+  query GetAccountInfo($accountId: ID!) {
     account(id: $accountId) {
-      id
-      name
+      businessName
     }
   }
 `
@@ -39,7 +38,7 @@ export async function POST(request: NextRequest) {
       if (data.account) {
         return NextResponse.json({
           valid: true,
-          accountName: data.account.name,
+          accountName: data.account.businessName,
         })
       } else {
         return NextResponse.json({

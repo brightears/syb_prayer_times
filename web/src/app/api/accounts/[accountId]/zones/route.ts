@@ -3,12 +3,22 @@ import { getSession } from '@/lib/auth'
 import { GraphQLClient, gql } from 'graphql-request'
 
 const GET_ZONES_QUERY = gql`
-  query GetZones($accountId: String!) {
+  query GetZones($accountId: ID!) {
     account(id: $accountId) {
-      zones {
-        items {
-          id
-          name
+      locations(first: 100) {
+        edges {
+          node {
+            id
+            name
+            soundZones(first: 100) {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -48,10 +58,21 @@ export async function GET(
     try {
       const data: any = await client.request(GET_ZONES_QUERY, { accountId })
       
-      if (data.account?.zones?.items) {
-        return NextResponse.json({
-          zones: data.account.zones.items,
+      if (data.account?.locations?.edges) {
+        const zones: any[] = []
+        data.account.locations.edges.forEach((location: any) => {
+          if (location.node?.soundZones?.edges) {
+            location.node.soundZones.edges.forEach((zone: any) => {
+              if (zone.node) {
+                zones.push({
+                  id: zone.node.id,
+                  name: `${location.node.name} - ${zone.node.name}`,
+                })
+              }
+            })
+          }
         })
+        return NextResponse.json({ zones })
       } else {
         return NextResponse.json({ zones: [] })
       }

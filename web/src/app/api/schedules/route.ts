@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         ramadanOnly: data.ramadanOnly,
         enabledPrayers: data.enabledPrayers,
         isActive: true,
-        adjustments: null, // Prayer durations will be calculated automatically by the backend
+        // adjustments field will store prayer durations calculated by backend
       },
     })
 

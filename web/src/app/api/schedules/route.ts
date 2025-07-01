@@ -12,10 +12,9 @@ const createScheduleSchema = z.object({
   calculationMethod: z.string(),
   juristicMethod: z.string(),
   highLatitudeRule: z.string(),
-  baselineVolume: z.number().min(0).max(100),
-  muteVolume: z.number().min(0).max(100),
+  muteEnabled: z.boolean(),
   preMuteMinutes: z.number().min(0).max(60),
-  muteDurationMinutes: z.number().min(1).max(120),
+  postPrayerMinutes: z.number().min(0).max(60),
   ramadanOnly: z.boolean(),
   enabledPrayers: z.array(z.string()),
 })
@@ -46,11 +45,11 @@ export async function POST(request: NextRequest) {
         calculationMethod: data.calculationMethod as any,
         juristicMethod: data.juristicMethod as any,
         highLatitudeRule: data.highLatitudeRule as any,
-        baselineVolume: data.baselineVolume,
-        muteDuringPrayer: true,
-        muteVolume: data.muteVolume,
+        baselineVolume: 50, // Default baseline volume - will restore to original
+        muteDuringPrayer: data.muteEnabled,
+        muteVolume: data.muteEnabled ? 0 : 50, // If muting, set to 0, otherwise keep playing
         preMuteMinutes: data.preMuteMinutes,
-        muteDurationMinutes: data.muteDurationMinutes,
+        muteDurationMinutes: data.postPrayerMinutes, // Using this field for post-prayer buffer
         ramadanOnly: data.ramadanOnly,
         enabledPrayers: data.enabledPrayers,
         isActive: true,

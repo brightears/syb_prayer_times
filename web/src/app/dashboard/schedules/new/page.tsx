@@ -152,10 +152,9 @@ export default function NewSchedulePage() {
     calculationMethod: 'ISNA',
     juristicMethod: 'SHAFI',
     highLatitudeRule: 'MIDDLE_OF_NIGHT',
-    baselineVolume: 50,
-    muteVolume: 0,
+    muteEnabled: true,
     preMuteMinutes: 0,
-    muteDurationMinutes: 10,
+    postPrayerMinutes: 1,
     ramadanOnly: false,
     enabledPrayers: ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'],
   })
@@ -372,70 +371,64 @@ export default function NewSchedulePage() {
           </select>
         </div>
 
-        {/* Volume Settings */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="baseline" className="block text-sm font-medium text-gray-700">
-              Music Volume When Not Praying (%)
-            </label>
+        {/* Mute Settings */}
+        <div className="space-y-4">
+          <div className="flex items-center">
             <input
-              type="number"
-              id="baseline"
-              min="0"
-              max="100"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              value={formData.baselineVolume}
-              onChange={(e) => setFormData({ ...formData, baselineVolume: parseInt(e.target.value) })}
+              type="checkbox"
+              id="muteEnabled"
+              className="rounded border-gray-300 text-primary focus:ring-primary"
+              checked={formData.muteEnabled}
+              onChange={(e) => setFormData({ ...formData, muteEnabled: e.target.checked })}
             />
-            <p className="mt-1 text-xs text-gray-500">Regular music volume outside prayer times</p>
-          </div>
-          <div>
-            <label htmlFor="mute" className="block text-sm font-medium text-gray-700">
-              Music Volume During Prayer (%)
+            <label htmlFor="muteEnabled" className="ml-2 text-sm font-medium text-gray-700">
+              Mute music during prayer times
             </label>
-            <input
-              type="number"
-              id="mute"
-              min="0"
-              max="100"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              value={formData.muteVolume}
-              onChange={(e) => setFormData({ ...formData, muteVolume: parseInt(e.target.value) })}
-            />
-            <p className="mt-1 text-xs text-gray-500">Set to 0 to mute music during prayers</p>
           </div>
-        </div>
-
-        {/* Timing Settings */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="premute" className="block text-sm font-medium text-gray-700">
-              Pre-mute Minutes
-            </label>
-            <input
-              type="number"
-              id="premute"
-              min="0"
-              max="30"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              value={formData.preMuteMinutes}
-              onChange={(e) => setFormData({ ...formData, preMuteMinutes: parseInt(e.target.value) })}
-            />
-          </div>
-          <div>
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-              Mute Duration (minutes)
-            </label>
-            <input
-              type="number"
-              id="duration"
-              min="1"
-              max="60"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-              value={formData.muteDurationMinutes}
-              onChange={(e) => setFormData({ ...formData, muteDurationMinutes: parseInt(e.target.value) })}
-            />
-          </div>
+          
+          {formData.muteEnabled && (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="premute" className="block text-sm font-medium text-gray-700">
+                    Pre-prayer Mute (minutes)
+                  </label>
+                  <input
+                    type="number"
+                    id="premute"
+                    min="0"
+                    max="30"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                    value={formData.preMuteMinutes}
+                    onChange={(e) => setFormData({ ...formData, preMuteMinutes: parseInt(e.target.value) })}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">Mute music this many minutes before prayer</p>
+                </div>
+                <div>
+                  <label htmlFor="postprayer" className="block text-sm font-medium text-gray-700">
+                    Post-prayer Buffer (minutes)
+                  </label>
+                  <input
+                    type="number"
+                    id="postprayer"
+                    min="0"
+                    max="30"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                    value={formData.postPrayerMinutes}
+                    onChange={(e) => setFormData({ ...formData, postPrayerMinutes: parseInt(e.target.value) })}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">Keep music muted this many minutes after prayer ends</p>
+                </div>
+              </div>
+              
+              <div className="rounded-md bg-blue-50 p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Note:</strong> Prayer durations vary by prayer type and local customs. Typical durations:
+                  Fajr (10-15 min), Dhuhr (10-15 min), Asr (8-10 min), Maghrib (7-10 min), Isha (15-20 min).
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Enabled Prayers */}

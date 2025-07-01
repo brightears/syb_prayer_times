@@ -157,13 +157,6 @@ export default function NewSchedulePage() {
     postPrayerMinutes: 1,
     ramadanOnly: false,
     enabledPrayers: ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'],
-    prayerDurations: {
-      fajr: 15,
-      dhuhr: 15,
-      asr: 10,
-      maghrib: 10,
-      isha: 20,
-    },
   })
 
   const handleAccountChange = async (accountId: string) => {
@@ -428,36 +421,16 @@ export default function NewSchedulePage() {
                 </div>
               </div>
               
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-700">
-                  Prayer Durations (minutes)
-                </label>
-                <div className="space-y-2">
-                  {PRAYERS.map(prayer => (
-                    <div key={prayer.value} className="flex items-center space-x-3">
-                      <label className="w-20 text-sm text-gray-600">{prayer.label}:</label>
-                      <input
-                        type="number"
-                        min="5"
-                        max="60"
-                        className="w-20 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                        value={formData.prayerDurations[prayer.value as keyof typeof formData.prayerDurations]}
-                        onChange={(e) => setFormData({
-                          ...formData,
-                          prayerDurations: {
-                            ...formData.prayerDurations,
-                            [prayer.value]: parseInt(e.target.value) || prayer.defaultDuration,
-                          },
-                        })}
-                        disabled={!formData.enabledPrayers.includes(prayer.value)}
-                      />
-                      <span className="text-xs text-gray-500">minutes</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Adjust based on your local mosque or community practice
+              <div className="rounded-md bg-blue-50 p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Smart Prayer Duration:</strong> The system automatically calculates prayer durations based on:
                 </p>
+                <ul className="mt-2 text-sm text-blue-700 list-disc list-inside">
+                  <li>Prayer type and calculation method</li>
+                  <li>Day of week (Friday prayers are longer)</li>
+                  <li>Ramadan period (includes Tarawih prayers)</li>
+                  <li>Regional customs for your selected method</li>
+                </ul>
               </div>
             </>
           )}

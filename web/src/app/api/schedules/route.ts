@@ -17,13 +17,6 @@ const createScheduleSchema = z.object({
   postPrayerMinutes: z.number().min(0).max(60),
   ramadanOnly: z.boolean(),
   enabledPrayers: z.array(z.string()),
-  prayerDurations: z.object({
-    fajr: z.number().min(5).max(60),
-    dhuhr: z.number().min(5).max(60),
-    asr: z.number().min(5).max(60),
-    maghrib: z.number().min(5).max(60),
-    isha: z.number().min(5).max(60),
-  }),
 })
 
 export async function POST(request: NextRequest) {
@@ -60,7 +53,7 @@ export async function POST(request: NextRequest) {
         ramadanOnly: data.ramadanOnly,
         enabledPrayers: data.enabledPrayers,
         isActive: true,
-        adjustments: data.prayerDurations, // Store prayer durations in the adjustments JSON field
+        adjustments: null, // Prayer durations will be calculated automatically by the backend
       },
     })
 

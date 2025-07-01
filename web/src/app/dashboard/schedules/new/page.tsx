@@ -34,63 +34,81 @@ const PRAYERS = [
 ]
 
 const TIMEZONES = [
-  // Middle East
-  { value: 'Asia/Dubai', label: 'Dubai, UAE (GMT+4)' },
-  { value: 'Asia/Riyadh', label: 'Riyadh, Saudi Arabia (GMT+3)' },
-  { value: 'Asia/Kuwait', label: 'Kuwait (GMT+3)' },
-  { value: 'Asia/Qatar', label: 'Qatar (GMT+3)' },
-  { value: 'Asia/Bahrain', label: 'Bahrain (GMT+3)' },
-  { value: 'Asia/Muscat', label: 'Muscat, Oman (GMT+4)' },
-  { value: 'Asia/Baghdad', label: 'Baghdad, Iraq (GMT+3)' },
-  { value: 'Asia/Jerusalem', label: 'Jerusalem (GMT+2)' },
-  { value: 'Asia/Beirut', label: 'Beirut, Lebanon (GMT+2)' },
-  { value: 'Asia/Damascus', label: 'Damascus, Syria (GMT+2)' },
-  { value: 'Asia/Amman', label: 'Amman, Jordan (GMT+2)' },
+  // GMT-8 to GMT-5
+  { value: 'America/Los_Angeles', label: 'Los Angeles, USA (GMT-8)', offset: -8 },
+  { value: 'America/Chicago', label: 'Chicago, USA (GMT-6)', offset: -6 },
+  { value: 'America/Mexico_City', label: 'Mexico City (GMT-6)', offset: -6 },
+  { value: 'America/New_York', label: 'New York, USA (GMT-5)', offset: -5 },
+  { value: 'America/Toronto', label: 'Toronto, Canada (GMT-5)', offset: -5 },
   
-  // Africa
-  { value: 'Africa/Cairo', label: 'Cairo, Egypt (GMT+2)' },
-  { value: 'Africa/Casablanca', label: 'Casablanca, Morocco (GMT+0)' },
-  { value: 'Africa/Algiers', label: 'Algiers, Algeria (GMT+1)' },
-  { value: 'Africa/Tunis', label: 'Tunis, Tunisia (GMT+1)' },
-  { value: 'Africa/Tripoli', label: 'Tripoli, Libya (GMT+2)' },
-  { value: 'Africa/Khartoum', label: 'Khartoum, Sudan (GMT+2)' },
-  { value: 'Africa/Lagos', label: 'Lagos, Nigeria (GMT+1)' },
-  { value: 'Africa/Nairobi', label: 'Nairobi, Kenya (GMT+3)' },
-  { value: 'Africa/Johannesburg', label: 'Johannesburg, South Africa (GMT+2)' },
+  // GMT+0
+  { value: 'Europe/London', label: 'London, UK (GMT+0)', offset: 0 },
+  { value: 'Africa/Casablanca', label: 'Casablanca, Morocco (GMT+0)', offset: 0 },
   
-  // Asia
-  { value: 'Asia/Karachi', label: 'Karachi, Pakistan (GMT+5)' },
-  { value: 'Asia/Kolkata', label: 'Delhi/Mumbai, India (GMT+5:30)' },
-  { value: 'Asia/Dhaka', label: 'Dhaka, Bangladesh (GMT+6)' },
-  { value: 'Asia/Jakarta', label: 'Jakarta, Indonesia (GMT+7)' },
-  { value: 'Asia/Kuala_Lumpur', label: 'Kuala Lumpur, Malaysia (GMT+8)' },
-  { value: 'Asia/Singapore', label: 'Singapore (GMT+8)' },
-  { value: 'Asia/Bangkok', label: 'Bangkok, Thailand (GMT+7)' },
-  { value: 'Asia/Istanbul', label: 'Istanbul, Turkey (GMT+3)' },
-  { value: 'Asia/Tehran', label: 'Tehran, Iran (GMT+3:30)' },
-  { value: 'Asia/Kabul', label: 'Kabul, Afghanistan (GMT+4:30)' },
+  // GMT+1
+  { value: 'Europe/Paris', label: 'Paris, France (GMT+1)', offset: 1 },
+  { value: 'Europe/Berlin', label: 'Berlin, Germany (GMT+1)', offset: 1 },
+  { value: 'Europe/Madrid', label: 'Madrid, Spain (GMT+1)', offset: 1 },
+  { value: 'Europe/Rome', label: 'Rome, Italy (GMT+1)', offset: 1 },
+  { value: 'Africa/Algiers', label: 'Algiers, Algeria (GMT+1)', offset: 1 },
+  { value: 'Africa/Tunis', label: 'Tunis, Tunisia (GMT+1)', offset: 1 },
+  { value: 'Africa/Lagos', label: 'Lagos, Nigeria (GMT+1)', offset: 1 },
   
-  // Europe
-  { value: 'Europe/London', label: 'London, UK (GMT+0)' },
-  { value: 'Europe/Paris', label: 'Paris, France (GMT+1)' },
-  { value: 'Europe/Berlin', label: 'Berlin, Germany (GMT+1)' },
-  { value: 'Europe/Madrid', label: 'Madrid, Spain (GMT+1)' },
-  { value: 'Europe/Rome', label: 'Rome, Italy (GMT+1)' },
-  { value: 'Europe/Moscow', label: 'Moscow, Russia (GMT+3)' },
+  // GMT+2
+  { value: 'Asia/Jerusalem', label: 'Jerusalem (GMT+2)', offset: 2 },
+  { value: 'Asia/Beirut', label: 'Beirut, Lebanon (GMT+2)', offset: 2 },
+  { value: 'Asia/Damascus', label: 'Damascus, Syria (GMT+2)', offset: 2 },
+  { value: 'Asia/Amman', label: 'Amman, Jordan (GMT+2)', offset: 2 },
+  { value: 'Africa/Cairo', label: 'Cairo, Egypt (GMT+2)', offset: 2 },
+  { value: 'Africa/Tripoli', label: 'Tripoli, Libya (GMT+2)', offset: 2 },
+  { value: 'Africa/Khartoum', label: 'Khartoum, Sudan (GMT+2)', offset: 2 },
+  { value: 'Africa/Johannesburg', label: 'Johannesburg, South Africa (GMT+2)', offset: 2 },
   
-  // Americas
-  { value: 'America/New_York', label: 'New York, USA (GMT-5)' },
-  { value: 'America/Chicago', label: 'Chicago, USA (GMT-6)' },
-  { value: 'America/Los_Angeles', label: 'Los Angeles, USA (GMT-8)' },
-  { value: 'America/Toronto', label: 'Toronto, Canada (GMT-5)' },
-  { value: 'America/Mexico_City', label: 'Mexico City (GMT-6)' },
+  // GMT+3
+  { value: 'Asia/Riyadh', label: 'Riyadh, Saudi Arabia (GMT+3)', offset: 3 },
+  { value: 'Asia/Kuwait', label: 'Kuwait (GMT+3)', offset: 3 },
+  { value: 'Asia/Qatar', label: 'Qatar (GMT+3)', offset: 3 },
+  { value: 'Asia/Bahrain', label: 'Bahrain (GMT+3)', offset: 3 },
+  { value: 'Asia/Baghdad', label: 'Baghdad, Iraq (GMT+3)', offset: 3 },
+  { value: 'Asia/Istanbul', label: 'Istanbul, Turkey (GMT+3)', offset: 3 },
+  { value: 'Europe/Moscow', label: 'Moscow, Russia (GMT+3)', offset: 3 },
+  { value: 'Africa/Nairobi', label: 'Nairobi, Kenya (GMT+3)', offset: 3 },
   
-  // Australia & Pacific
-  { value: 'Australia/Sydney', label: 'Sydney, Australia (GMT+11)' },
-  { value: 'Australia/Melbourne', label: 'Melbourne, Australia (GMT+11)' },
-  { value: 'Australia/Perth', label: 'Perth, Australia (GMT+8)' },
-  { value: 'Pacific/Auckland', label: 'Auckland, New Zealand (GMT+13)' },
-].sort((a, b) => a.label.localeCompare(b.label))
+  // GMT+3:30
+  { value: 'Asia/Tehran', label: 'Tehran, Iran (GMT+3:30)', offset: 3.5 },
+  
+  // GMT+4
+  { value: 'Asia/Dubai', label: 'Dubai, UAE (GMT+4)', offset: 4 },
+  { value: 'Asia/Muscat', label: 'Muscat, Oman (GMT+4)', offset: 4 },
+  
+  // GMT+4:30
+  { value: 'Asia/Kabul', label: 'Kabul, Afghanistan (GMT+4:30)', offset: 4.5 },
+  
+  // GMT+5
+  { value: 'Asia/Karachi', label: 'Karachi, Pakistan (GMT+5)', offset: 5 },
+  
+  // GMT+5:30
+  { value: 'Asia/Kolkata', label: 'Delhi/Mumbai, India (GMT+5:30)', offset: 5.5 },
+  
+  // GMT+6
+  { value: 'Asia/Dhaka', label: 'Dhaka, Bangladesh (GMT+6)', offset: 6 },
+  
+  // GMT+7
+  { value: 'Asia/Jakarta', label: 'Jakarta, Indonesia (GMT+7)', offset: 7 },
+  { value: 'Asia/Bangkok', label: 'Bangkok, Thailand (GMT+7)', offset: 7 },
+  
+  // GMT+8
+  { value: 'Asia/Kuala_Lumpur', label: 'Kuala Lumpur, Malaysia (GMT+8)', offset: 8 },
+  { value: 'Asia/Singapore', label: 'Singapore (GMT+8)', offset: 8 },
+  { value: 'Australia/Perth', label: 'Perth, Australia (GMT+8)', offset: 8 },
+  
+  // GMT+11
+  { value: 'Australia/Sydney', label: 'Sydney, Australia (GMT+11)', offset: 11 },
+  { value: 'Australia/Melbourne', label: 'Melbourne, Australia (GMT+11)', offset: 11 },
+  
+  // GMT+13
+  { value: 'Pacific/Auckland', label: 'Auckland, New Zealand (GMT+13)', offset: 13 },
+]
 
 export default function NewSchedulePage() {
   const router = useRouter()

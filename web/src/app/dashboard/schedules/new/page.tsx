@@ -26,11 +26,11 @@ const HIGH_LATITUDE_RULES = [
 ]
 
 const PRAYERS = [
-  { value: 'fajr', label: 'Fajr' },
-  { value: 'dhuhr', label: 'Dhuhr' },
-  { value: 'asr', label: 'Asr' },
-  { value: 'maghrib', label: 'Maghrib' },
-  { value: 'isha', label: 'Isha' },
+  { value: 'fajr', label: 'Fajr', defaultDuration: 15 },
+  { value: 'dhuhr', label: 'Dhuhr', defaultDuration: 15 },
+  { value: 'asr', label: 'Asr', defaultDuration: 10 },
+  { value: 'maghrib', label: 'Maghrib', defaultDuration: 10 },
+  { value: 'isha', label: 'Isha', defaultDuration: 20 },
 ]
 
 const TIMEZONES = [
@@ -157,6 +157,13 @@ export default function NewSchedulePage() {
     postPrayerMinutes: 1,
     ramadanOnly: false,
     enabledPrayers: ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'],
+    prayerDurations: {
+      fajr: 15,
+      dhuhr: 15,
+      asr: 10,
+      maghrib: 10,
+      isha: 20,
+    },
   })
 
   const handleAccountChange = async (accountId: string) => {
@@ -421,10 +428,35 @@ export default function NewSchedulePage() {
                 </div>
               </div>
               
-              <div className="rounded-md bg-blue-50 p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> Prayer durations vary by prayer type and local customs. Typical durations:
-                  Fajr (10-15 min), Dhuhr (10-15 min), Asr (8-10 min), Maghrib (7-10 min), Isha (15-20 min).
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Prayer Durations (minutes)
+                </label>
+                <div className="space-y-2">
+                  {PRAYERS.map(prayer => (
+                    <div key={prayer.value} className="flex items-center space-x-3">
+                      <label className="w-20 text-sm text-gray-600">{prayer.label}:</label>
+                      <input
+                        type="number"
+                        min="5"
+                        max="60"
+                        className="w-20 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                        value={formData.prayerDurations[prayer.value as keyof typeof formData.prayerDurations]}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          prayerDurations: {
+                            ...formData.prayerDurations,
+                            [prayer.value]: parseInt(e.target.value) || prayer.defaultDuration,
+                          },
+                        })}
+                        disabled={!formData.enabledPrayers.includes(prayer.value)}
+                      />
+                      <span className="text-xs text-gray-500">minutes</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Adjust based on your local mosque or community practice
                 </p>
               </div>
             </>

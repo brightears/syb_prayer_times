@@ -33,6 +33,33 @@ const PRAYERS = [
   { value: 'isha', label: 'Isha' },
 ]
 
+const TIMEZONES = [
+  { value: 'Africa/Cairo', label: 'Africa/Cairo (Egypt)' },
+  { value: 'Africa/Johannesburg', label: 'Africa/Johannesburg (South Africa)' },
+  { value: 'America/New_York', label: 'America/New York (Eastern US)' },
+  { value: 'America/Chicago', label: 'America/Chicago (Central US)' },
+  { value: 'America/Los_Angeles', label: 'America/Los Angeles (Pacific US)' },
+  { value: 'Asia/Dubai', label: 'Asia/Dubai (UAE)' },
+  { value: 'Asia/Riyadh', label: 'Asia/Riyadh (Saudi Arabia)' },
+  { value: 'Asia/Kuwait', label: 'Asia/Kuwait' },
+  { value: 'Asia/Qatar', label: 'Asia/Qatar' },
+  { value: 'Asia/Bahrain', label: 'Asia/Bahrain' },
+  { value: 'Asia/Muscat', label: 'Asia/Muscat (Oman)' },
+  { value: 'Asia/Karachi', label: 'Asia/Karachi (Pakistan)' },
+  { value: 'Asia/Kolkata', label: 'Asia/Kolkata (India)' },
+  { value: 'Asia/Dhaka', label: 'Asia/Dhaka (Bangladesh)' },
+  { value: 'Asia/Jakarta', label: 'Asia/Jakarta (Indonesia)' },
+  { value: 'Asia/Kuala_Lumpur', label: 'Asia/Kuala Lumpur (Malaysia)' },
+  { value: 'Asia/Singapore', label: 'Asia/Singapore' },
+  { value: 'Asia/Bangkok', label: 'Asia/Bangkok (Thailand)' },
+  { value: 'Asia/Istanbul', label: 'Asia/Istanbul (Turkey)' },
+  { value: 'Europe/London', label: 'Europe/London (UK)' },
+  { value: 'Europe/Paris', label: 'Europe/Paris (France)' },
+  { value: 'Europe/Berlin', label: 'Europe/Berlin (Germany)' },
+  { value: 'Australia/Sydney', label: 'Australia/Sydney' },
+  { value: 'Australia/Melbourne', label: 'Australia/Melbourne' },
+]
+
 export default function NewSchedulePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -247,14 +274,18 @@ export default function NewSchedulePage() {
           <label htmlFor="timezone" className="block text-sm font-medium text-gray-700">
             Timezone
           </label>
-          <input
-            type="text"
+          <select
             id="timezone"
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
             value={formData.timeZone}
             onChange={(e) => setFormData({ ...formData, timeZone: e.target.value })}
-          />
+          >
+            <option value="">Select a timezone</option>
+            {TIMEZONES.map(tz => (
+              <option key={tz.value} value={tz.value}>{tz.label}</option>
+            ))}
+          </select>
         </div>
 
         {/* Calculation Method */}
@@ -295,7 +326,7 @@ export default function NewSchedulePage() {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="baseline" className="block text-sm font-medium text-gray-700">
-              Normal Volume (%)
+              Music Volume When Not Praying (%)
             </label>
             <input
               type="number"
@@ -306,10 +337,11 @@ export default function NewSchedulePage() {
               value={formData.baselineVolume}
               onChange={(e) => setFormData({ ...formData, baselineVolume: parseInt(e.target.value) })}
             />
+            <p className="mt-1 text-xs text-gray-500">Regular music volume outside prayer times</p>
           </div>
           <div>
             <label htmlFor="mute" className="block text-sm font-medium text-gray-700">
-              Prayer Volume (%)
+              Music Volume During Prayer (%)
             </label>
             <input
               type="number"
@@ -320,6 +352,7 @@ export default function NewSchedulePage() {
               value={formData.muteVolume}
               onChange={(e) => setFormData({ ...formData, muteVolume: parseInt(e.target.value) })}
             />
+            <p className="mt-1 text-xs text-gray-500">Set to 0 to mute music during prayers</p>
           </div>
         </div>
 

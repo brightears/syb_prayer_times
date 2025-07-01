@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "cd .. && npx prisma generate && cd backend && node dist/index.js",
+    "start": "bash start.sh",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx src/seed.ts",
-    "postinstall": "cd .. && npx prisma generate && cd backend"
+    "postinstall": "mkdir -p prisma && cp ../prisma/schema.prisma ./prisma/ && npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
@@ -24,6 +24,7 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "node-schedule": "^2.1.1",
+    "prisma": "^5.11.0",
     "typescript": "^5.4.3",
     "winston": "^3.13.0",
     "zod": "^3.22.4"

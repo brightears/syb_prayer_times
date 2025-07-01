@@ -14,7 +14,11 @@ export default async function AccountsPage() {
     include: {
       _count: {
         select: {
-          users: true,
+          users: {
+            where: {
+              role: 'CLIENT',
+            },
+          },
           prayerSchedules: true,
         },
       },

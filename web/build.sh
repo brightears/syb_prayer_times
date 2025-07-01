@@ -4,6 +4,9 @@ set -e
 echo "Installing web dependencies..."
 npm install
 
+echo "Creating Prisma directory..."
+mkdir -p prisma
+
 echo "Copying Prisma schema..."
 cp ../prisma/schema.prisma ./prisma/
 
